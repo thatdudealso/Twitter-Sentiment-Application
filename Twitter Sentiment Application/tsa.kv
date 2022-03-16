@@ -1,0 +1,1169 @@
+WindowManager:
+    Home:
+    Existing:
+    Scraper:
+    Explore:
+    Sentiment:
+    Tweet:
+
+
+#: import NoTransition kivy.uix.screenmanager.NoTransition
+#: import SlideTransition kivy.uix.screenmanager.SlideTransition
+<Home>:
+    name: "home"
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        padding: 30
+        spacing: 20
+
+        BoxLayout:
+            orientation: "vertical"
+            padding: 30
+
+            Image:
+                source: "assets/logo.png"
+
+            BoxLayout:
+                orientation: "vertical"
+
+                Label:
+                    text: "Twitter Scraper & Analyzer"
+                    font_size: 50
+                    color: '#00acee'
+
+                Button:
+                    size_hint: 0.10, 0.45
+                    pos_hint: {'center_x': .5, 'center_y': 0.5}
+                    background_color: 0,0,0,0
+                    on_release: Factory.InfoPop().open()
+                    Image:
+                        source: "assets/info.png"
+                        center_x: self.parent.center_x
+                        center_y: self.parent.center_y
+
+
+
+
+
+        GridLayout:
+            padding: 20
+            spacing: 100
+            size_hint: 0.6, 0.25
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            cols: 2
+            rows: 1
+
+            Button:
+                text: "Use Saved Data"
+                font_size: 32
+                color: "#FFFFFF"
+                on_release:
+                    app.root.current = "existing"
+                    root.manager.transition.direction = "right"
+
+            Button:
+                text: "Scrape New Data"
+                font_size: 32
+                color: "#FFFFFF"
+                on_release:
+                    app.root.current = "scraper"
+                    root.manager.transition.direction = "left"
+
+#:import Factory kivy.factory.Factory
+<InfoPop@Popup>:
+    auto_dismiss: True
+    size_hint: 0.7, 0.7
+    background_color: "#424549"
+    title: "Twitter Scraper & Analyzer - Information Page"
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        Label:
+            text: "Welcome!"
+            font_size: 40
+            size_hint: 1, 0.3
+            halign: 'center'
+            valign: 'middle'
+            color: '#00acee'
+        Label:
+            text: "This Application serves as both a Twitter Scraper and Analyzer.\nThe Home Page presents you with two options: To Use Saved Data, or Scrape New Data. \nIf this is your first time using the application, you're going to have to scrape some new data. \nOn the Scraper screen, follow along with the input prompts. \nPlease input keywords seperated by commas, and dates in the format YYYY-MM-DD. \nOnce you've scraped some data, you can select your saved dataset from the Saved Data Screen!\nPlease select the dataset you'd like to analyze and hit Load File. This will automatically navigate you to the analysis page! \nThe Analysis Page features THREE dashboards showcasing exploratory, sentiment, and specific tweet analysis. \nThe Exploratory page features information on the tweet languages, tweet terms, and tweet engagement. \nThe Sentimental page offers a look at sentiments of the overall set. \nThe Tweets page looks at singular tweets, their sentiments, and similarities"
+
+
+<ExistPop@Popup>:
+    auto_dismiss: True
+    size_hint: 0.7, 0.7
+    background_color: "#424549"
+    title: "Saved and Existing Datasets"
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        Label:
+            text: "This page lets you choose any existing dataset. \nSimply click on one to select, then press load file."
+            font_size: 20
+            halign: 'center'
+            valign: 'middle'
+        Label:
+            halign: 'center'
+            valign: 'middle'
+            text: "If you wish to use an external dataset, you can! \nYou just have to navigate to the app's data folder and move it there.\nIt will then show up on this screen!\nHowever all datasets must be in csv format with columns: \nid, created_at, username, liked_count, retweets_count, replies_count, tweet, hashtags. \nTherefore we recommend using the built in scraper!"
+
+<ScrapPop@Popup>:
+    auto_dismiss: True
+    size_hint: 0.7, 0.7
+    background_color: "#424549"
+    title: "Scrape New Data from Twitter"
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        Label:
+            text: "This page lets you scrape a new dataset from Twitter. \nFill out the inputs below, then press Begin Scrape. \nDepending on your preferences this may take several minutes!"
+            font_size: 20
+            halign: 'center'
+            valign: 'middle'
+        Label:
+            halign: 'center'
+            valign: 'middle'
+            text: "Input Details:\nKeywords must be single words seperated by commas.\nSince refers to the starting date in the format YYYY-MM-DD\nUntil refers to the ending date in the format YYYY-MM-DD\nLeaving Since and Until empty will scrape the most recent tweets!\nLimit refers to the total number of tweets to retrieve (minimun of 20), we recommend 100-1000 for best results, default is 100.\nMinimum Likes, Retweets, Replies refers to the number of each a tweet must have in order to be included, default is 0.\nFile save name is the name you will see for this dataset on the saved data page."
+
+<ExpPop@Popup>:
+    auto_dismiss: True
+    size_hint: 0.7, 0.7
+    background_color: "#424549"
+    title: "Exploratory Analysis"
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        Label:
+            text: "This page offers a basic exploratory view at the data you selected!"
+            font_size: 20
+            halign: 'center'
+            valign: 'middle'
+        Label:
+            halign: 'center'
+            valign: 'middle'
+            text: "Features:\nA bar chart displaying the top 5 most prevalent languages.\nA word cloud and bar chart showcasing the most common terms.\nA breakdown of the top 5 most liked, most retweeted, and most replied to tweets."
+
+<SenPop@Popup>:
+    auto_dismiss: True
+    size_hint: 0.7, 0.7
+    background_color: "#424549"
+    title: "Sentiment Analysis"
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        Label:
+            text: "This page offers a time series look at the sentiments of the data you selected!\nHere you can explore how emotions and sentiments change over time in your dataset!"
+            font_size: 20
+            halign: 'center'
+            valign: 'middle'
+        Label:
+            halign: 'center'
+            valign: 'middle'
+            text: "Features:\nA look at emotions over time - summed and averaged.\nA look at positive and negative sentiments over time - summed and averaged.\nThe Legend corresponding to the emotions/sentiments seen in the plots is on the right side.\nYou are able to change the number of splits in the data on the bottom right.\nIt defaults to 10 equal splits over the time frame represented in your data. This can be set anywhere from 1 to 20."
+
+<TwePop@Popup>:
+    auto_dismiss: True
+    size_hint: 0.7, 0.7
+    background_color: "#424549"
+    title: "Tweet Analysis"
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        Label:
+            text: "This page offers a in depth look at each individual tweet in your dataset!\nNote: The performance of this page will depend on your computer's memory.\nIt has been tested on up to 10,000 tweets, but if there are too many it will crash!"
+            font_size: 20
+            halign: 'center'
+            valign: 'middle'
+        Label:
+            halign: 'center'
+            valign: 'middle'
+            text: "Features:\nYour selected tweet will display on the top left of the screen.\n Below the tweet will be it's emotion/sentiment breakdown. NOTE: This only works for English language tweets!\nAt the bottom left is the Tweet Navigation. You may specify a specific tweet in the window, find a random tweet, or use the arrows to increment by 1, 10, or 100.\nOn the other half of the screen is a display of the 5 most similar tweets by content and sentiment.\nContent is found by using TFIDF weights with cosine similarity.\nSentiment similarity is found by comparing the sentiments of the current tweet with all other tweets again with cosine similarity."
+<Existing>:
+    name: "existing"
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+
+        BoxLayout:
+            orientation: "vertical"
+            spacing: 5
+            padding: 20
+
+            BoxLayout:
+                orientation: "vertical"
+                size_hint: 0.3,1
+                pos_hint: {'center_x': .5, 'center_y': 0.5}
+                Label:
+                    text: "Choose Saved Tweets"
+                    pos_hint: {'center_x': .5, 'center_y': 0.5}
+                    color: '#00acee'
+                    font_size: 32
+                Button:
+                    size_hint: .4,1
+                    pos_hint: {'center_x': .5, 'center_y': 0.5}
+                    background_color: 0,0,0,0
+                    on_release: Factory.ExistPop().open()
+                    Image:
+                        source: "assets/info_small.png"
+                        center_x: self.parent.center_x
+                        center_y: self.parent.center_y
+            Label:
+                text: "Pick any existing dataset to analyze:"
+                font_size: 18
+                color: 'FFFFFF'
+
+        FileChooserListView:
+            id: filechooser
+            path: "data"
+            size_hint: 1, 1.5
+            padding: (0,10,0,10)
+
+        BoxLayout:
+            orientation: "vertical"
+            spacing: 5
+            padding: 40
+
+            Button:
+                text: "Load File"
+                font_size: 18
+                size_hint: 0.20, 0.4
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                on_release:
+                    root.set_file(filechooser.selection)
+                    app.root.current = "explore"
+
+
+            Button:
+                #text: "Go Back"
+                #font_size: 18
+                size_hint: 0.10, 0.65
+                pos_hint: {'center_x': .95, 'center_y': 0.5}
+                background_color: 0,0,0,0
+                on_release:
+                    app.root.current = "home"
+                    root.manager.transition.direction = "left"
+
+                Image:
+                    source: "assets/arrow.png"
+                    center_x: self.parent.center_x
+                    center_y: self.parent.center_y
+
+
+
+
+<MyPopup@Popup>:
+    auto_dismiss: False
+    size_hint: 0.9, 0.9
+    background_color: "#000000"
+    title: "NOTE: This may take several minutes depending on configuration! Please Wait!"
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        Label:
+            text: "SCRAPING..."
+            font_size: 40
+            halign: 'center'
+            valign: 'middle'
+            color: '#00acee'
+        Image:
+            source: 'assets/loading.gif'
+
+<Scraper>:
+    name: "scraper"
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+
+        BoxLayout:
+            orientation: "vertical"
+            spacing: 5
+            padding: 20
+
+            BoxLayout:
+                orientation: "vertical"
+                size_hint: 0.3,1
+                pos_hint: {'center_x': .5, 'center_y': 0.5}
+                Label:
+                    text: "Scrape New Tweets"
+                    pos_hint: {'center_x': .5, 'center_y': 0.5}
+                    color: '#00acee'
+                    font_size: 32
+                Button:
+                    size_hint: .4,1
+                    pos_hint: {'center_x': .5, 'center_y': 0.5}
+                    background_color: 0,0,0,0
+                    on_release: Factory.ScrapPop().open()
+                    Image:
+                        source: "assets/info_small.png"
+                        center_x: self.parent.center_x
+                        center_y: self.parent.center_y
+
+            Label:
+                text: "Input the following parameters to retrieve tweets:"
+                font_size: 18
+                color: '#FFFFFF'
+
+        BoxLayout:
+            orientation: "vertical"
+            size_hint: 1, 1.5
+            padding: (0,10,0,10)
+
+            TextInput:
+                id: keywords
+                hint_text: "Keywords (Seperate with Commas)"
+                padding: 5
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                size_hint: 0.50, 0.5
+
+            TextInput:
+                id: fromdate
+                hint_text: "From (YYYY-MM-DD)"
+                padding: 5
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                size_hint: 0.50, 0.5
+                multiline: False
+
+
+            TextInput:
+                id: untildate
+                hint_text: "Until (YYYY-MM-DD)"
+                padding: 5
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                size_hint: 0.50, 0.5
+                multiline: False
+
+
+            TextInput:
+                id: limit
+                hint_text: "Tweet Count Limit"
+                padding: 5
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                size_hint: 0.50, 0.5
+                multiline: False
+                input_filter: 'int'
+
+            GridLayout:
+                cols:3
+                rows:1
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                size_hint: 0.50, 0.5
+                TextInput:
+                    id: like_lim
+                    hint_text: "Minimum Likes"
+                    padding: 5
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    size_hint: 0.50, 0.5
+                    multiline: False
+                    input_filter: 'int'
+                TextInput:
+                    id: retweets_lim
+                    hint_text: "Minimum Retweets"
+                    padding: 5
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    size_hint: 0.50, 0.5
+                    multiline: False
+                    input_filter: 'int'
+                TextInput:
+                    id: replies_lim
+                    hint_text: "Minimum Replies"
+                    padding: 5
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    size_hint: 0.50, 0.5
+                    multiline: False
+                    input_filter: 'int'
+
+
+            TextInput:
+                id: name
+                hint_text: "File Save Name"
+                padding: 5
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                size_hint: 0.50, 0.5
+                multiline: False
+
+
+        BoxLayout:
+            orientation: "vertical"
+            spacing: 5
+            padding: 40
+
+            Button:
+                text: "Begin Scrape"
+                font_size: 18
+                size_hint: 0.20, 0.4
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                on_press:
+                    root.open()
+                on_release:
+                    root.keyword_scrape()
+                    root.close()
+                    #root.MyPopup.dismiss_popup()
+
+                    app.root.current = "existing"
+                    root.manager.transition.direction = "left"
+
+            Button:
+                size_hint: 0.10, 0.65
+                pos_hint: {'center_x': .05, 'center_y': 0.5}
+                background_color: 0,0,0,0
+                on_release:
+                    app.root.current = "home"
+                    root.manager.transition.direction = "right"
+
+                Image:
+                    source: "assets/arrowleft.png"
+                    center_x: self.parent.center_x
+                    center_y: self.parent.center_y
+
+<Explore>:
+    name: "explore"
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        spacing: 10
+        padding: [0,10,0,0]
+
+        BoxLayout:
+            orientation: "vertical"
+            size_hint: 0.3,0.2
+            pos_hint: {'center_x': .5, 'center_y': 0.5}
+            spacing: 10
+            Label:
+                text: "Exploratory Analysis"
+                pos_hint: {'center_x': .5, 'center_y': 0.5}
+                color: '#00acee'
+                font_size: 32
+            Button:
+                size_hint: .4,1
+                pos_hint: {'center_x': .5, 'center_y': 0.5}
+                background_color: 0,0,0,0
+                on_release: Factory.ExpPop().open()
+                Image:
+                    source: "assets/info_small.png"
+                    center_x: self.parent.center_x
+                    center_y: self.parent.center_y
+
+        GridLayout:
+            cols: 3
+            rows: 2
+            size_hint: 1, 1.8
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            spacing: 20
+            padding: 10
+
+            BoxLayout:
+                orientation: "vertical"
+                Label:
+                    text: "Tweet Languages"
+                    font_size: 18
+                    size_hint: 1, 0.5
+
+                Image:
+                    id: langplot
+                    source: "temp/lang.png"
+                    size_hint: 1,1.5
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                Label:
+                    id: langcnt
+                    size_hint: 1, 0.5
+                    text: "Total Number of Languages:"
+
+            BoxLayout:
+                orientation: "vertical"
+                Label:
+                    text: "WordCloud"
+                    font_size: 18
+                    size_hint: 1, 0.5
+
+                Image:
+                    id: cloud
+                    source: "temp/cloud.png"
+                    size_hint: 1,1.5
+                    size: self.texture_size
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+                Label:
+                    size_hint: 1, 0.5
+                    text: ""
+
+            BoxLayout:
+                orientation: "vertical"
+                Label:
+                    text: "Top Terms and Keywords"
+                    font_size: 18
+                    size_hint: 1, 0.5
+
+                Image:
+                    id: wordplot
+                    source: "temp/words.png"
+                    size_hint: 1,1.5
+                    size: self.texture_size
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+                Label:
+                    id: wrdcnt
+                    size_hint: 1, 0.5
+                    text: "Total Words Without Stop Words:"
+
+            BoxLayout:
+                orientation: "vertical"
+                Label:
+                    text: "Most Liked Tweets"
+                    font_size: 18
+                    size_hint: 1, 0.5
+
+
+
+
+                GridLayout:
+                    size_hint: 1,1
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    cols:3
+                    rows:1
+
+                    Button:
+                        text: "<"
+                        font_size: 48
+                        size_hint: .1, .2
+                        background_color: 0,0,0,0
+                        on_release: root.liked_inc(-1)
+
+                    Label:
+                        id: top_like
+                        size_hint_y: None
+                        size_hint: .6,1.5
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        text_size: self.width, None
+                        height: self.texture_size[1]
+                        text: ""
+
+                    Button:
+                        text: ">"
+                        font_size: 48
+                        size_hint: .1, .2
+                        background_color: 0,0,0,0
+                        on_release: root.liked_inc(1)
+
+            BoxLayout:
+                orientation: "vertical"
+                Label:
+                    text: "Most Retweeted Tweets"
+                    font_size: 18
+                    size_hint: 1, 0.5
+
+                GridLayout:
+                    size_hint: 1,1
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    cols:3
+                    rows:1
+
+                    Button:
+                        text: "<"
+                        font_size: 48
+                        size_hint: .1, .2
+                        background_color: 0,0,0,0
+                        on_release: root.retweet_inc(-1)
+
+                    Label:
+                        id: top_retweet
+                        size_hint_y: None
+                        size_hint: .6,1.5
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        text_size: self.width, None
+                        height: self.texture_size[1]
+                        text: ""
+
+                    Button:
+                        text: ">"
+                        font_size: 48
+                        size_hint: .1, .2
+                        background_color: 0,0,0,0
+                        on_release: root.retweet_inc(1)
+
+            BoxLayout:
+                orientation: "vertical"
+                Label:
+                    text: "Most Replied To Tweets"
+                    font_size: 18
+                    size_hint: 1, 0.5
+
+                GridLayout:
+                    size_hint: 1,1
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    cols:3
+                    rows:1
+
+                    Button:
+                        text: "<"
+                        font_size: 48
+                        size_hint: .1, .2
+                        background_color: 0,0,0,0
+                        on_release: root.rep_inc(-1)
+
+                    Label:
+                        id: top_rep
+                        size_hint_y: None
+                        size_hint: .6,1.5
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        text_size: self.width, None
+                        height: self.texture_size[1]
+                        text: ""
+
+                    Button:
+                        text: ">"
+                        font_size: 48
+                        size_hint: .1, .2
+                        background_color: 0,0,0,0
+                        on_release: root.rep_inc(1)
+
+        GridLayout:
+            cols: 4
+            rows: 1
+            size_hint: 1, 0.1
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+            Button:
+                text: "Exploratory Analysis"
+                font_size: 18
+                size_hint: 0.20, 0.4
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                background_color: '#034e6b'
+
+            Button:
+                text: "Sentiment Analysis"
+                font_size: 18
+                size_hint: 0.20, 0.4
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                background_color: '#00acee'
+                on_release:
+                    app.root.transition = NoTransition()
+                    app.root.current = "sentiment"
+
+
+            Button:
+                text: "Tweet Analysis"
+                font_size: 18
+                size_hint: 0.20, 0.4
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                background_color: '#00acee'
+                on_release:
+                    app.root.transition = NoTransition()
+                    app.root.current = "tweet"
+
+
+            Button:
+                text: "Back to Home"
+                font_size: 18
+                size_hint: 0.20, 0.4
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                on_release:
+                    app.root.transition = SlideTransition(direction='down')
+                    app.root.current = "home"
+
+<Sentiment>:
+    name: "sentiment"
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        spacing: 10
+        padding: [0,10,0,0]
+
+        BoxLayout:
+            orientation: "vertical"
+            size_hint: 0.3,0.2
+            pos_hint: {'center_x': .5, 'center_y': 0.5}
+            spacing: 10
+            Label:
+                text: "Sentiment Analysis"
+                pos_hint: {'center_x': .5, 'center_y': 0.5}
+                color: '#00acee'
+                font_size: 32
+            Button:
+                size_hint: .4,1
+                pos_hint: {'center_x': .5, 'center_y': 0.5}
+                background_color: 0,0,0,0
+                on_release: Factory.SenPop().open()
+                Image:
+                    source: "assets/info_small.png"
+                    center_x: self.parent.center_x
+                    center_y: self.parent.center_y
+
+        GridLayout:
+            cols: 2
+            rows: 1
+            size_hint: 1, 1.8
+
+            GridLayout:
+                cols: 2
+                rows: 2
+                size_hint: 1, 1.8
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                padding: 10
+
+                BoxLayout:
+                    orientation: "vertical"
+
+                    Label:
+                        text: "Emotion Sum"
+                        font_size: 18
+                        size_hint: 1, 0.5
+
+                    Image:
+                        id: sent1
+                        source: "temp/sent1.png"
+                        size_hint: 1,1.5
+                        size: self.texture_size
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+
+                BoxLayout:
+                    orientation: "vertical"
+
+                    Label:
+                        text: "Emotion Average"
+                        font_size: 18
+                        size_hint: 1, 0.5
+
+                    Image:
+                        id: sent2
+                        source: "temp/sent2.png"
+                        size_hint: 1,1.5
+                        size: self.texture_size
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+                BoxLayout:
+                    orientation: "vertical"
+
+                    Label:
+                        text: "Sentiment Sum"
+                        font_size: 18
+                        size_hint: 1, 0.5
+
+                    Image:
+                        id: sent3
+                        source: "temp/sent3.png"
+                        size_hint: 1,1.5
+                        size: self.texture_size
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+                BoxLayout:
+                    orientation: "vertical"
+
+                    Label:
+                        text: "Sentiment Average"
+                        font_size: 18
+                        size_hint: 1, 0.5
+
+                    Image:
+                        id: sent4
+                        source: "temp/sent4.png"
+                        size_hint: 1,1.5
+                        size: self.texture_size
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+            GridLayout:
+                cols: 1
+                rows: 2
+                size_hint: 0.3, 1
+
+                BoxLayout:
+                    orientation: "vertical"
+                    padding: [0,0,10,0]
+
+                    Label:
+                        text: "Legend"
+                        font_size: 18
+                        size_hint: 1, 0.5
+
+                    GridLayout:
+                        cols: 2
+                        rows: 1
+                        spacing: 10
+                        Image:
+                            source: "assets/legend_emo.png"
+                            #size_hint: 1,1.5
+                            #size: self.texture_size
+                            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        Image:
+                            source: "assets/legend_sen.png"
+                            #size_hint: 1,1.5
+                            #size: self.texture_size
+                            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+                BoxLayout:
+                    orientation: "vertical"
+                    padding: [0,0,10,0]
+
+                    Label:
+                        text: "Change Date Split:"
+                        font_size: 18
+                        size_hint: 1, 0.5
+
+                    GridLayout:
+                        cols: 3
+                        rows: 1
+                        size_hint: 1, 1
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+                        Button:
+                            text: "<"
+                            font_size: 48
+                            size_hint: 1, .2
+                            background_color: 0,0,0,0
+                            on_release: root.update_split(-1)
+                        Label:
+                            id: split
+                            text: "10"
+                            font_size: 48
+                        Button:
+                            text: ">"
+                            font_size: 48
+                            size_hint: 1, .2
+                            background_color: 0,0,0,0
+                            on_release: root.update_split(1)
+
+
+        GridLayout:
+            cols: 4
+            rows: 1
+            size_hint: 1, 0.1
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+            Button:
+                text: "Exploratory Analysis"
+                font_size: 18
+                size_hint: 0.20, 0.4
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                background_color: '#00acee'
+                on_release:
+                    app.root.transition = NoTransition()
+                    app.root.current = "explore"
+
+
+            Button:
+                text: "Sentiment Analysis"
+                font_size: 18
+                size_hint: 0.20, 0.4
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                background_color: '#034e6b'
+
+
+            Button:
+                text: "Tweet Analysis"
+                font_size: 18
+                size_hint: 0.20, 0.4
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                background_color: '#00acee'
+                on_release:
+                    app.root.transition = NoTransition()
+                    app.root.current = "tweet"
+
+
+            Button:
+                text: "Back to Home"
+                font_size: 18
+                size_hint: 0.20, 0.4
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                on_release:
+                    app.root.transition = SlideTransition(direction='down')
+                    app.root.current = "home"
+                    root.manager.transition.direction = "down"
+
+<Tweet>:
+    name: "tweet"
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        spacing: 10
+        padding: [0,10,0,0]
+
+        BoxLayout:
+            orientation: "vertical"
+            size_hint: 0.3,0.2
+            pos_hint: {'center_x': .5, 'center_y': 0.5}
+            spacing: 10
+            Label:
+                text: "Tweet Analysis"
+                pos_hint: {'center_x': .5, 'center_y': 0.5}
+                color: '#00acee'
+                font_size: 32
+            Button:
+                size_hint: .4,1
+                pos_hint: {'center_x': .5, 'center_y': 0.5}
+                background_color: 0,0,0,0
+                on_release: Factory.TwePop().open()
+                Image:
+                    source: "assets/info_small.png"
+                    center_x: self.parent.center_x
+                    center_y: self.parent.center_y
+
+
+        GridLayout:
+            cols: 2
+            rows: 1
+            size_hint: 1, 1.8
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            spacing: 20
+            padding: 10
+
+            BoxLayout:
+                orientation: 'vertical'
+                spacing: 15
+
+                BoxLayout:
+                    orientation: 'vertical'
+
+                    Label:
+                        text: "Selected Tweet:"
+                        font_size: 18
+                        size_hint: 1, 0.3
+
+                    Label:
+
+                        id: seltweet
+                        padding: (100,0)
+                        size_hint: 1, 1.5
+                        text_size: self.width, None
+                        height: self.texture_size[1]
+                        text: "Selected Tweet"
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint: 1,1.5
+
+
+                    Label:
+                        text: "Tweet Emotion/Sentiments (English Tweets):"
+                        font_size: 16
+                        size_hint: 1, 0.3
+
+                    Image:
+                        id: nrcplot
+                        source: "temp/nrc.png"
+                        size_hint: 1,1.5
+                        size: self.texture_size
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+                GridLayout:
+                    cols:1
+                    rows:2
+                    size_hint: 1, 0.3
+                    spacing: 2
+
+
+                    GridLayout:
+                        cols:6
+                        rows:1
+                        size_hint: .5, 0.1
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        padding: [100,0,100,0]
+
+                        Button:
+                            text: "<<<"
+                            font_size: 32
+                            size_hint: .25, 0.1
+                            background_color: 0,0,0,0
+                            #background_color: '#FFB296'
+                            on_release:
+                                root.increment(-100)
+                        Button:
+                            text: "<<"
+                            font_size: 32
+                            size_hint: .15, 0.1
+                            background_color: 0,0,0,0
+                            #background_color: '#FFB296'
+                            on_release:
+                                root.increment(-10)
+                        Button:
+                            text: "<"
+                            font_size: 32
+                            size_hint: .10, 0.1
+                            background_color: 0,0,0,0
+                            #background_color: '#FFB296'
+                            on_release:
+                                root.increment(-1)
+                        Button:
+                            text: ">"
+                            font_size: 32
+                            size_hint: .10, 0.1
+                            background_color: 0,0,0,0
+                            #background_color: '#FFB296'
+                            on_release:
+                                root.increment(1)
+                        Button:
+                            text: ">>"
+                            font_size: 32
+                            size_hint: .15, 0.1
+                            background_color: 0,0,0,0
+                            #background_color: '#FFB296'
+                            on_release:
+                                root.increment(10)
+                        Button:
+                            text: ">>>"
+                            font_size: 32
+                            size_hint: .25, 0.1
+                            background_color: 0,0,0,0
+                            #background_color: '#FFB296'
+                            on_release:
+                                root.increment(100)
+
+
+                    GridLayout:
+                        cols:2
+                        rows:1
+                        size_hint: 1, 0.1
+                        spacing: 20
+                        padding: [100,0,100,0]
+
+                        GridLayout:
+                            cols: 2
+                            rows: 1
+
+                            TextInput:
+                                id: tweetid
+                                hint_text: "Tweet ID"
+                                multiline: False
+                                input_filter: 'int'
+
+                            Button:
+                                text: "Select"
+                                font_size: 18
+                                on_release:
+                                    root.selected_tweet()
+
+
+                        Button:
+                            text: "Random Tweet!"
+                            font_size: 18
+                            background_color: '#f26161'
+                            on_release:
+                                root.random_tweet()
+
+
+
+            BoxLayout:
+                orientation: 'vertical'
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: 5
+
+                    Label:
+                        text: "Most Similar Tweets by Content:"
+                        font_size: 18
+                        size_hint: 1, 0.3
+
+                    ScrollView:
+                        id: scrollcontent
+                        do_scroll_x: False
+                        do_scroll_y: True
+                        bar_color: '#00acee'
+                        bar_width: 4
+
+
+                        BoxLayout:
+                            height: 600
+                            size_hint_y: None
+                            spacing: 20
+                            orientation: "vertical"
+
+                            Label:
+                                id: contenttweets
+                                #size_hint_y: None
+                                text_size: self.width, None
+                                height: self.texture_size[1]
+                                text: "Most Similar Content"
+
+
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: 5
+
+                    Label:
+                        text: "Most Similar Tweets by Sentiment:"
+                        font_size: 18
+                        size_hint: 1, 0.3
+
+                    ScrollView:
+                        id: scrollemocontent
+                        do_scroll_x: False
+                        do_scroll_y: True
+                        bar_color: '#00acee'
+                        bar_width: 4
+
+
+                        BoxLayout:
+                            id: boxemocontent
+                            height: 600
+                            size_hint_y: None
+                            spacing: 20
+                            orientation: "vertical"
+
+                            Label:
+                                id: emotweets
+                                #size_hint_y: None
+                                text_size: self.width, None
+                                height: self.texture_size[1]
+                                text: "Most Similar Content"
+
+        GridLayout:
+            cols: 4
+            rows: 1
+            size_hint: 1, 0.1
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+            Button:
+                text: "Exploratory Analysis"
+                font_size: 18
+                size_hint: 0.20, 0.4
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                background_color: '#00acee'
+                on_release:
+                    app.root.transition = NoTransition()
+                    app.root.current = "explore"
+
+
+            Button:
+                text: "Sentiment Analysis"
+                font_size: 18
+                size_hint: 0.20, 0.4
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                background_color: '#00acee'
+                on_release:
+                    app.root.transition = NoTransition()
+                    app.root.current = "sentiment"
+
+
+
+            Button:
+                text: "Tweet Analysis"
+                font_size: 18
+                size_hint: 0.20, 0.4
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                background_color: '#034e6b'
+
+
+            Button:
+                text: "Back to Home"
+                font_size: 18
+                size_hint: 0.20, 0.4
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                on_release:
+                    app.root.transition = SlideTransition(direction='down')
+                    app.root.current = "home"
